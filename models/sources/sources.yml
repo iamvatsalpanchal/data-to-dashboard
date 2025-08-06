@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: raw_vpanchal
+       
+    tables:
+      - name: accounts
+      - name: contacts
+      - name: leads
+      - name: users
+      - name: opportunities
+      - name: subscriptions
+      - name: invoices
+      - name: customers
+      - name: campaigns
+      - name: campaign_members
+
+
+
