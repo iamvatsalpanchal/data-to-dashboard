@@ -1,3 +1,7 @@
+{{ config(
+    materialized='view'
+) }}
+
 WITH leads AS (
     SELECT
         leadid,
@@ -55,7 +59,7 @@ roi_conversion_analysis_view AS (
         CAST(campaigns.campaign_budgeted_cost AS DECIMAL)
 )
 
-SELECT 
+SELECT  
     *,
     CASE 
         WHEN campaign_conversion_rate >= 50 THEN 'Excellent'

@@ -1,3 +1,7 @@
+{{ config(
+    materialized='view'
+) }}
+
 WITH leads AS (
     SELECT
         leadid,
