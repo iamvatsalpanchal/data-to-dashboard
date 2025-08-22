@@ -27,7 +27,7 @@ leads AS (
         {{ ref('leads_view') }}
 ),
 
-campaign_performance_analysis_view AS (
+campaign_summary_view AS (
     SELECT
         campaign_type,
         COUNT(DISTINCT campaignid) AS total_active_campaigns,
@@ -42,4 +42,4 @@ campaign_performance_analysis_view AS (
 SELECT
     *
 FROM
-    campaign_performance_analysis_view
+    campaign_summary_view
