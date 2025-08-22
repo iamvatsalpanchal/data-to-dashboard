@@ -164,3 +164,62 @@ account_360_view AS (
         account_created_at,
         account_customer_type
 ) SELECT * FROM account_360_view WHERE accountid = 'A0100'
+
+
+{{ config(
+    materialized='view'
+) }}
+
+
+WITH campaigns AS (
+    SELECT
+        campaignid,
+        campaign_name,
+        campaign_type,
+        CAST(campaign_start_date AS TIMESTAMP) AS campaign_start_date,
+        CAST(campaign_end_date AS TIMESTAMP) AS campaign_end_date,
+        campaign_owner_id
+    FROM 
+        {{ ref('campaigns_view') }}
+),
+
+leads AS (
+    SELECT
+        CONCAT(lead_first_name,' ', lead_last_name) AS lead_full_name,
+        lead_company,
+        lead_status,
+        lead_source,
+        lead_owner_id
+    FROM 
+        {{ ref('leads_view') }}
+),
+
+campaign_summary_view AS (
+    SELECT
+        campaign_owner_id,
+        campaign_name,
+        lead_full_name,
+        campaign_type,
+        campaign_start_date,
+        campaign_end_date,
+        COUNT(*) AS total_leads,
+        SUM(CASE WHEN lead_status = 'Converted' THEN 1 ELSE 0 END) AS total_converted_leads,
+        ROUND((SUM(CASE WHEN lead_status = 'Converted' THEN 1 ELSE 0 END)::DECIMAL / COUNT(*)) * 100, 2) AS conversion_rate
+    FROM 
+        campaigns
+    LEFT JOIN 
+        leads ON 
+        campaigns.campaign_owner_id = leads.lead_owner_id
+    GROUP BY 
+        campaign_owner_id, 
+        lead_full_name,
+        campaign_name, 
+        campaign_type, 
+        campaign_start_date, 
+        campaign_end_date
+)
+
+SELECT
+    *
+FROM
+    campaign_summary_view
