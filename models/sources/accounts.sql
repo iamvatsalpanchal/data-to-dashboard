@@ -1,8 +1,3 @@
-{{ config(
-    materialized='table',
-    schema='raw_vpanchal'
-) }}
-
 WITH accounts AS (
     SELECT
         *
