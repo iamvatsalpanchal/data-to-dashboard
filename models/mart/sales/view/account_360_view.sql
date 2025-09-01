@@ -93,8 +93,7 @@ contacts AS (
 leads AS (
     SELECT
         leadid,
-        lead_first_name,
-        lead_last_name,
+        lead_name,
         lead_email,
         lead_company,
         lead_status,
@@ -144,12 +143,12 @@ account_360_view AS (
         COUNT(DISTINCT opportunityid) FILTER (WHERE opportunity_stage = 'Closed Won') AS opportunities_won,
         SUM(CAST(opportunity_amount AS DECIMAL)) AS total_potential_revenue,
         AVG(CAST(opportunity_amount AS DECIMAL)) AS avg_deal_size,
-        ROUND
-            (
-                COUNT(DISTINCT opportunityid) FILTER (WHERE opportunity_stage = 'Closed Won') * 1.0 /
-                COALESCE(COUNT(DISTINCT opportunityid) FILTER (WHERE opportunity_stage IN ('Closed Won','Closed Lost', 'Proposal', 'Negotiation', 'Prospecting', 'Qualification')), 0), 2
-            ) 
-        AS win_rate,
+        -- ROUND
+        --     (
+        --         COUNT(DISTINCT opportunityid) FILTER (WHERE opportunity_stage = 'Closed Won') * 100 /
+        --         COALESCE(COUNT(DISTINCT opportunityid) FILTER (WHERE opportunity_stage IN ('Closed Won','Closed Lost', 'Proposal', 'Negotiation', 'Prospecting', 'Qualification')), 0), 2
+        --     ) 
+        -- AS win_rate,
         MAX(opportunity_close_date) AS last_opportunity_date,
 
 
