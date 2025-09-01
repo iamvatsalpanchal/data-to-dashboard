@@ -1,7 +1,3 @@
-{{ config(
-    materialized='view'
-) }}
-
 WITH leads AS (
     SELECT
         leadid,
@@ -13,7 +9,7 @@ WITH leads AS (
 
 monthly_lead_generation_view AS (
     SELECT 
-        DATE_TRUNC('month', lead_created_at) AS monthhh,
+        DATE_TRUNC('month', lead_created_at) AS month,
         COUNT(*) AS leads_generated,
         COUNT(CASE WHEN lead_status = 'Converted' THEN 1 END) AS leads_converted,
         ROUND((COUNT(CASE WHEN lead_status = 'Converted' THEN 1 END)::DECIMAL / COUNT(*) * 100), 2) AS monthly_conversion_rate

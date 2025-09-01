@@ -1,5 +1,3 @@
-
-
 WITH customers AS (
     SELECT
         customerid,

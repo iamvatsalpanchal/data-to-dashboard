@@ -1,7 +1,3 @@
-{{ config(
-    materialized='view'
-) }}
-
 WITH accounts AS (
     SELECT
         accountid,

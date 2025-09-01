@@ -1,8 +1,3 @@
-{{ config(
-    materialized='view'
-) }}
-
-
 WITH campaigns AS (
     SELECT
         campaignid,

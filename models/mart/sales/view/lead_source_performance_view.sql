@@ -1,7 +1,3 @@
-{{ config(
-    materialized='view'
-) }}
-
 WITH leads AS (
     SELECT
         lead_status,
