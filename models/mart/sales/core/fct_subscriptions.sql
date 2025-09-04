@@ -6,7 +6,8 @@ WITH fct_subscriptions AS (
         CAST(startdate AS DATE) AS subscription_start_date,
         CAST(enddate AS DATE) AS subscription_end_date,
         status AS subscription_status,
-        plan AS subscription_plan
+        plan AS subscription_plan,
+        CAST(lastmodifieddate AS DATE) AS subscription_last_modified_at
     FROM 
         {{ ref('subscriptions') }}
 )

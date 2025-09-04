@@ -7,7 +7,8 @@ WITH dim_contacts AS (
         email AS contact_email,
         phone AS contact_phone,
         title AS contact_title,
-        city AS contact_city
+        city AS contact_city,
+        CAST(lastmodifieddate AS DATE) AS contact_last_modified_at
     FROM 
         {{ ref('contacts') }}
 )

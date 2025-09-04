@@ -5,7 +5,8 @@ WITH fct_invoices AS (
         subscriptionid AS invoice_subscription_id,
         CAST(invoicedate AS DATE) AS invoice_date,
         CAST(amountdue AS DECIMAL) AS invoice_total_amount_due,
-        paid AS invoice_paid
+        paid AS invoice_paid,
+        CAST(lastmodifieddate AS DATE) AS invoice_last_modified_at
     FROM 
         {{ ref('invoices') }}
 )

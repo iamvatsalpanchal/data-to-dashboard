@@ -7,7 +7,8 @@ WITH dim_campaigns AS (
         CAST(enddate AS TIMESTAMP) AS campaign_end_date,
         CAST(budget AS DECIMAL) AS campaign_budgeted_cost,
         CAST(expectedrevenue AS DECIMAL) AS campaign_expected_revenue,
-        ownerid AS campaign_owner_id
+        ownerid AS campaign_owner_id,
+        CAST(lastmodifieddate AS DATE) AS campaign_last_modified_at
     FROM 
         {{ ref('campaigns') }}
 )

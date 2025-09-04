@@ -6,7 +6,8 @@ WITH dim_users AS (
         role AS user_role,
         region AS user_region,
         CAST(hiredate AS DATE) AS user_hired_at,
-        active AS user_active
+        active AS user_active,
+        CAST(lastmodifieddate AS DATE) AS user_last_modified_at
     FROM 
         {{ ref('users') }}
 )

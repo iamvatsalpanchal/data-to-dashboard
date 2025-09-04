@@ -7,7 +7,9 @@ WITH dim_opportunities AS (
         CAST(amount AS DECIMAL) AS opportunity_amount,
         CAST(closedate AS DATE) AS opportunity_close_date,
         CAST(createddate AS DATE) AS opportunity_created_at,
-        probability AS opportunity_probability
+        probability AS opportunity_probability,
+        CAST(lastmodifieddate AS DATE) AS opportunity_last_modified_at,
+        leadid AS opportunity_lead_id
     FROM 
         {{ ref('opportunities') }}
 )

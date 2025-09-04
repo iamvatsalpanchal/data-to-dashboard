@@ -8,7 +8,8 @@ WITH dim_accounts AS (
         CAST(annualrevenue AS DECIMAL) AS account_annual_revenue,
         billingcity AS account_billing_city,
         billingcountry AS account_billing_country,
-        customertype AS account_customer_type
+        customertype AS account_customer_type,
+        CAST(lastmodifieddate AS DATE) AS account_last_modified_at
     FROM 
         {{ ref('accounts') }}
 )
