@@ -19,15 +19,15 @@ users AS (
     FROM {{ ref('dim_users') }}
 ),
 
-leads AS (
-    SELECT
-        leadid,
-        lead_name,
-        lead_owner_id,
-        lead_created_at,
-        lead_source
-    FROM {{ ref('dim_leads') }}
-),
+-- leads AS (
+--     SELECT
+--         leadid,
+--         lead_name,
+--         lead_owner_id,
+--         lead_created_at,
+--         lead_source
+--     FROM {{ ref('dim_leads') }}
+-- ),
 
 accounts AS (
     SELECT

@@ -3,8 +3,9 @@ WITH leads AS (
         leadid,
         lead_owner_id,
         lead_status,
-        lead_created_at,
-        lead_source
+        lead_last_modified_at,
+        lead_source,
+        lead_created_at
     FROM {{ ref('dim_leads') }}
 ),
 
@@ -30,18 +31,15 @@ users AS (
 
 lead_generation_conversion_view AS (
     SELECT
-        EXTRACT(MONTH FROM lead_created_at) AS lead_creation_month,
+        lead_last_modified_at,
         lead_source,
         lead_status,
-        COUNT(DISTINCT leadid) AS total_leads,
-        ROUND(AVG(lead_created_at - opportunity_created_at),2)AS lead_to_opportunity_days
-    FROM users
-    LEFT JOIN leads 
+        leadid,
+        rep_name,
+        user_region
+    FROM leads
+    LEFT JOIN users
         ON users.userid = leads.lead_owner_id
-    LEFT JOIN opportunities 
-        ON users.userid = opportunities.opportunity_owner_id
-    WHERE lead_status = 'Converted'
-    GROUP BY EXTRACT(MONTH FROM lead_created_at), lead_source, lead_status
 )
 
 SELECT * FROM lead_generation_conversion_view

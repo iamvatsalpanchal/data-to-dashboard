@@ -4,10 +4,10 @@ WITH accounts AS (
         accountid,
         account_owner_id,
         account_industry,
-        account_created_at,
         account_annual_revenue,
         account_billing_country,
-        account_customer_type
+        account_customer_type,
+        account_last_modified_at
     FROM {{ ref('dim_accounts') }}
 ),
 
@@ -36,22 +36,21 @@ revenue_subscription_analytics_view AS (
     SELECT
         accountid,
         subscription_plan,
-        -- EXTRACT(MONTH FROM subscription_start_date) AS subscription_start_month,
-        
+        account_last_modified_at,
+        SUM(account_annual_revenue) AS ARR,
+        DIV(SUM(account_annual_revenue), 12) AS MRR,
+        COUNT(DISTINCT subscriptionid) AS total_subscriptions,
         COUNT(DISTINCT subscriptionid) FILTER(WHERE subscription_status = 'Active') AS active_subscriptions,
-        -- EXTRACT(MONTH FROM account_created_at) AS account_creation_month,
-        -- DIV(COUNT(accountid) FILTER(WHERE account_customer_type = 'Churned') * 100, COUNT(accountid) FILTER(WHERE account_customer_type IN ('Existing', 'Churned'))) AS gross_churn_rate,
-        -- DIV(COUNT(accountid) FILTER(WHERE account_customer_type = 'Churned') * 100, COUNT(accountid) FILTER(WHERE account_customer_type IN ('Existing', 'Churned', 'New'))) AS net_churn_rate,
         SUM(CASE WHEN invoice_paid = 'true' THEN invoice_amount ELSE 0 END) AS paid_invoice_amount,
         SUM(CASE WHEN invoice_paid = 'false' THEN invoice_amount ELSE 0 END) AS unpaid_invoice_amount,
         ROUND(AVG(subscription_end_date - subscription_start_date), 2) AS avg_subscription_days
     FROM accounts
-    LEFT JOIN invoices 
-        ON accounts.accountid = invoices.invoice_account_id
     LEFT JOIN subscriptions 
         ON accounts.accountid = subscriptions.subscription_account_id
-    GROUP BY accountid, subscription_plan
-    --  EXTRACT(MONTH FROM subscription_start_date)
+    LEFT JOIN invoices 
+        ON accounts.accountid = invoices.invoice_account_id
+    WHERE subscription_plan IS NOT NULL
+    GROUP BY accountid, subscription_plan, account_last_modified_at
 )
 
 SELECT * FROM revenue_subscription_analytics_view
